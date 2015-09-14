@@ -16,7 +16,7 @@ class CsvBuilderTest {
             prop("itemId", isoDate(lastMonth()))
             prop("endorsementKey", uuid())
             prop("encryptedEndorsementKey", uuid())
-            prop("lorem", lorem(int(3,5)))
+            prop("lorem", lorem(counter()))
             prop("int", int(5, 20))
         }
 
