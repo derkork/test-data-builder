@@ -6,11 +6,8 @@ import com.google.gson.JsonObject
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVPrinter
 import org.apache.commons.csv.QuoteMode
-import java.io.File
-import java.io.FileOutputStream
-import java.nio.charset.Charset
 
-public class MyObject : MyExpression<Any> {
+public open class MyObject : MyExpression<Any> {
 
 
     var properties = linkedMapOf<String, MyExpression<*>>()
@@ -27,13 +24,13 @@ public class MyObject : MyExpression<Any> {
         return result
     }
 
-    public fun <T:MyExpression<*>> prop(name: String, expression: T): T {
+    public fun <T : MyExpression<*>> prop(name: String, expression: T): T {
         properties[name] = expression
         return expression
     }
 
     public fun prop(name: String, init: MyObject.() -> Unit): MyObject {
-        val obj =  prop(name, MyObject())
+        val obj = prop(name, MyObject())
         obj.init()
         return obj
     }
@@ -46,7 +43,25 @@ public class MyObject : MyExpression<Any> {
         return prop(name, MyInt(value))
     }
 
-    public fun toJson(pretty: Boolean): String {
+    public fun get(path: String): MyExpression<*> {
+        val index = path.indexOf(".")
+        if (index != -1) {
+            val propertyName = path.substring(0, index)
+            val rest = path.substring(index + 1)
+            val value = properties[propertyName]
+            if ( value is MyObject) {
+                return value.get(rest)
+            }
+            throw IllegalArgumentException("The property at path " + path + " is no object.")
+        }
+        val result = properties[path]
+        if (result != null) {
+            return result;
+        }
+        throw IllegalArgumentException("The property at path " + path + " does not exist.")
+    }
+
+    public fun toJson(pretty: Boolean = true): String {
         val builder = GsonBuilder()
         if (pretty) {
             builder.setPrettyPrinting()
@@ -86,7 +101,6 @@ public class MyObject : MyExpression<Any> {
         result.properties = copy
         return result
     }
-
 
 
 }
