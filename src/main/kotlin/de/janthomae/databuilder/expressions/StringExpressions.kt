@@ -73,7 +73,13 @@ public fun lorem(words: MyInt): MyString = MyString { LoremIpsum().getWords(word
 public fun lorem(words: Int): MyString = MyString (LoremIpsum().getWords(words))
 
 
+/**
+ * Pads the result of the given expression left with the given chars.
+ */
+public fun padLeft(length:Int, expression:MyExpression<*>, character:Char = '0') : MyString =
+        MyString { expression.computeValue().toString().padStart(length,character) }
+
 // concatenation of JsonStrings
-public fun MyString.plus(other: MyExpressionBase<*>): MyString = MyString { computeValue() + other.computeValue() }
+public fun MyString.plus(other: MyExpression<*>): MyString = MyString { computeValue() + other.computeValue() }
 public fun MyString.plus(other: String): MyString = MyString { computeValue() + other }
 

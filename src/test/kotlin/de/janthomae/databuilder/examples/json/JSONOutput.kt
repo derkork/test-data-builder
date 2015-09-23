@@ -21,7 +21,7 @@ fun main(args: Array<String>) {
     }).materialize()  // materializes the data, so it can now be propertly referenced
 
     // Now that these records are materialized we can reference properties from them to build derived properties
-    // in this case, add an email address to each person derived from their first & last names
+    // in this case, augment each person with an email address derived from their first & last names
     persons = augment(persons, {
         prop("email", string(get("firstName")).toLower() + "." + string(get("lastName")).toLower() + "@" + oneOf("googlemail.com", "yahoo.com", "live.com", "outlook.com"))
     }).materialize()
