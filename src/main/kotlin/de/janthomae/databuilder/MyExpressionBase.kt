@@ -2,7 +2,7 @@ package de.janthomae.databuilder
 
 
 abstract class MyExpressionBase<T> : MyExpression<T> {
-    var value:T = null
+    var value:T? =null
 
     constructor(value: T) {
         this.value = value
@@ -20,7 +20,7 @@ abstract class MyExpressionBase<T> : MyExpression<T> {
             return f()
         }
         else {
-            return value
+            return value as T
         }
     }
 

@@ -13,7 +13,7 @@ public fun obj(init: MyObject.() -> Unit): MyObject {
 
 public fun write(value: String, outputPath: String, charset: Charset = Charsets.UTF_8) {
     val file = File(outputPath)
-    val parent = file.parent
+    val parent = file.parentFile
     if (parent != null && !parent.exists()) {
         parent.mkdirs()
     }

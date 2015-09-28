@@ -1,7 +1,7 @@
 package de.janthomae.databuilder.expressions
 
 import de.janthomae.databuilder.*
-import java.util.Collections
+import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 
 public fun MyInt.times<T>(obj: MyExpression<T>): MyExpression<Array<MyExpression<T>>> =
@@ -11,7 +11,7 @@ public fun MyInt.times<T>(obj: MyExpression<T>): MyExpression<Array<MyExpression
 
 
 public fun Int.times<T>(obj: MyExpression<T>): MyArray<T> =
-        MyArray {
+        MyArray<T> {
             val lst = arrayListOf<MyExpression<T>>()
             for (i in 1..this) {
                 lst.add(obj)
@@ -27,7 +27,7 @@ public fun oneOf<T>(array: MyExpression<Array<MyExpression<T>>>): MyExpression<T
             computed[ThreadLocalRandom.current().nextInt(computed.size())]
         }
 
-public fun augment(array: MyExpression<Array<MyExpression<Any>>>, init: MyObject.() -> Unit): MyArray<Any> = MyArray {
+public fun augment(array: MyExpression<Array<MyExpression<Any>>>, init: MyObject.() -> Unit): MyArray<Any> = MyArray<Any> {
     val result = arrayListOf<MyExpression<Any>>()
     for (item in array.computeValue()) {
         result.add(item)
@@ -44,7 +44,7 @@ public fun augment(array: MyExpression<Array<MyExpression<Any>>>, init: MyObject
 public fun choose<T>(array: MyExpression<Array<MyExpression<T>>>, amount: Int): MyArray<T> = choose(array, MyInt(amount))
 
 public fun choose<T>(array: MyExpression<Array<MyExpression<T>>>, amount: MyInt): MyArray<T> =
-        MyArray {
+        MyArray<T> {
             val realAmount = amount.computeValue()
             if (realAmount == 0) {
                 emptyArray()
@@ -60,7 +60,7 @@ public fun at<T>(array: MyExpression<Array<MyExpression<T>>>, index: MyInt): MyE
         MyComputedExpression { array.computeValue()[index.computeValue()] }
 
 public fun cross(array: MyExpression<Array<MyExpression<Any>>>, array2: MyExpression<Array<MyExpression<Any>>>, init: MyCombinedObject.() -> Unit):
-        MyArray<Any> = MyArray {
+        MyArray<Any> = MyArray<Any> {
     val result = arrayListOf<MyExpression<Any>>()
     for (first in array.computeValue()) {
         for (second in array2.computeValue()) {
