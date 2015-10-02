@@ -2,12 +2,12 @@ package de.janthomae.databuilder.examples.csv;
 
 import de.janthomae.databuilder.expressions.*
 import de.janthomae.databuilder.obj
-import de.janthomae.databuilder.write
+import de.janthomae.databuilder.serialization.toCsv
 
 fun main(args: Array<String>) {
 
-    // Define an object (must be flat for CSV output)
-    val data = obj {
+    // Define 20k objects (must be flat for CSV output)
+    val data = 22 * obj {
         // This column will just count up
         prop("Index", counter())
         // This combines a string with a counter
@@ -23,5 +23,5 @@ fun main(args: Array<String>) {
     }
 
     // write 20k lines to the file given through the command line
-    write(data.toCsv(20000), args[0])
+    println(data.toCsv())//, args[0])
 }

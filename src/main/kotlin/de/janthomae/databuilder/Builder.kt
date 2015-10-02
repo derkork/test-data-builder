@@ -11,14 +11,4 @@ public fun obj(init: MyObject.() -> Unit): MyObject {
 }
 
 
-public fun write(value: String, outputPath: String, charset: Charset = Charsets.UTF_8) {
-    val file = File(outputPath)
-    val parent = file.parentFile
-    if (parent != null && !parent.exists()) {
-        parent.mkdirs()
-    }
 
-    val stream = FileOutputStream(file)
-    stream.write(value.toByteArray(charset))
-    stream.close();
-}

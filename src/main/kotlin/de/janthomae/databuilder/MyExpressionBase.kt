@@ -2,6 +2,7 @@ package de.janthomae.databuilder
 
 
 abstract class MyExpressionBase<T> : MyExpression<T> {
+    @Suppress("BASE_WITH_NULLABLE_UPPER_BOUND")
     var value:T? =null
 
     constructor(value: T) {

@@ -1,11 +1,7 @@
 package de.janthomae.databuilder
 
-import com.google.gson.GsonBuilder
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
-import org.apache.commons.csv.CSVFormat
-import org.apache.commons.csv.CSVPrinter
-import org.apache.commons.csv.QuoteMode
 
 public open class MyObject : MyExpression<Any> {
 
@@ -61,35 +57,6 @@ public open class MyObject : MyExpression<Any> {
         throw IllegalArgumentException("The property at path " + path + " does not exist.")
     }
 
-    public fun toJson(pretty: Boolean = true): String {
-        val builder = GsonBuilder()
-        if (pretty) {
-            builder.setPrettyPrinting()
-        }
-        return builder.create().toJson(toElement())
-    }
-
-    public fun toCsv(numberOfLines: Int, columnSeparator: Char = ',', rowSeparator: String = "\n", quotationMark: Char = '"', addHeader: Boolean = true): String {
-        val result = StringBuilder()
-        var format = CSVFormat.DEFAULT.withDelimiter(columnSeparator).withRecordSeparator(rowSeparator).withQuote(quotationMark).withQuoteMode(QuoteMode.NON_NUMERIC)
-        if (addHeader) {
-            val strings = properties.keySet().toTypedArray()
-            format = format.withHeader(*strings)
-        }
-        val printer = CSVPrinter(result, format)
-
-        val values = arrayOfNulls<Any>(properties.size())
-        for ( i in 1..numberOfLines ) {
-            var index = 0
-            for ( prop in properties) {
-                values[index++] = prop.value.computeValue()
-            }
-            printer.printRecord(*values)
-        }
-
-        printer.close()
-        return result.toString()
-    }
 
 
     override fun materialize(): MyExpression<Any> {

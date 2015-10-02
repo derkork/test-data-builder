@@ -21,4 +21,4 @@ public fun int(from: Int, to: Int): MyInt = MyInt { ThreadLocalRandom.current().
 public fun counter(start:Int = 1) : MyInt = Counter(start)
 
 
-private class Counter(start:Int, val counter : AtomicInteger = AtomicInteger(start)) : MyInt({counter.getAndIncrement()})
+private class Counter(start:Int, val counter : AtomicInteger = AtomicInteger(start)) : MyInt({counter.andIncrement })

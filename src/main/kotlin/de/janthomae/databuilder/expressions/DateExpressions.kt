@@ -11,7 +11,7 @@ public fun isoDate(from: DateTime): MyString = isoDate(from, DateTime.now())
 
 public fun isoDate(from: DateTime, until: DateTime): MyString {
     return MyString({
-        val period = until.getMillis() + from.getMillis()
+        val period = until.millis + from.millis
         val instant = ThreadLocalRandom.current().nextLong(period)
         ISODateTimeFormat.dateTime().withZoneUTC().print(from.plusMillis(instant.toInt()))
     })
@@ -21,7 +21,7 @@ public fun date(pattern: String, from: DateTime): MyString = date(pattern, from,
 
 public fun date(pattern: String, from: DateTime, until: DateTime): MyString {
     return MyString({
-        val period = until.getMillis() + from.getMillis()
+        val period = until.millis + from.millis
         val instant = ThreadLocalRandom.current().nextLong(period)
         DateTimeFormat.forPattern(pattern).print(from.plusMillis(instant.toInt()))
     })

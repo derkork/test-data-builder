@@ -1,8 +1,8 @@
-package de.janthomae.databuilder.examples.json
+package de.janthomae.databuilder.examples.sql
 
 import de.janthomae.databuilder.expressions.*
 import de.janthomae.databuilder.obj
-import de.janthomae.databuilder.serialization.toJson
+import de.janthomae.databuilder.serialization.toSql
 
 
 fun main(args: Array<String>) {
@@ -17,6 +17,8 @@ fun main(args: Array<String>) {
         prop("firstName", oneOf("Jack", "Jamie", "John", "Joanne", "Jill", "Jessica"))
         // pick a random last name
         prop("lastName", oneOf("Smith", "Johnson", "Williams", "Jones", "Brown", "Davis", "Miller"))
+        // a random age
+        prop("age", int(20, 55))
         // a random date within the last 5 months
         prop("subscriptionDate", isoDate(lastMonth(5)))
     }).materialize()  // materializes the data, so it can now be propertly referenced
@@ -43,14 +45,10 @@ fun main(args: Array<String>) {
     }), 40)
 
 
-    // now make a course listing
-    val register = obj {
-        prop("persons", persons)
-        prop("courses", courses)
-        prop("assignments", assignments)
-    }
 
-    println(register.toJson())
+    println(persons.toSql("persons"))
+    println(courses.toSql("courses"))
+    println(assignments.toSql("person_course_assignments"))
 
 
 }
