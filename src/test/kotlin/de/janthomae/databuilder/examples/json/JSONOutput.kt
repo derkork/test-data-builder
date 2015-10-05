@@ -1,5 +1,8 @@
 package de.janthomae.databuilder.examples.json
 
+import de.janthomae.databuilder.data.firstName
+import de.janthomae.databuilder.data.lastName
+import de.janthomae.databuilder.data.uuid
 import de.janthomae.databuilder.expressions.*
 import de.janthomae.databuilder.obj
 import de.janthomae.databuilder.serialization.toJson
@@ -14,9 +17,9 @@ fun main(args: Array<String>) {
     var persons = (20 * obj {
         prop("id", uuid())
         // pick a random first name
-        prop("firstName", oneOf("Jack", "Jamie", "John", "Joanne", "Jill", "Jessica"))
+        prop("firstName", firstName())
         // pick a random last name
-        prop("lastName", oneOf("Smith", "Johnson", "Williams", "Jones", "Brown", "Davis", "Miller"))
+        prop("lastName", lastName())
         // a random date within the last 5 months
         prop("subscriptionDate", isoDate(lastMonth(5)))
     }).materialize()  // materializes the data, so it can now be propertly referenced
@@ -25,7 +28,7 @@ fun main(args: Array<String>) {
     // Now that these records are materialized we can reference properties from them to build derived properties
     // in this case, augment each person with an email address derived from their first & last names
     persons = augment(persons, {
-        prop("email", string(get("firstName")).toLower() + "." + string(get("lastName")).toLower() + "@" + oneOf("googlemail.com", "yahoo.com", "live.com", "outlook.com"))
+        prop("email", string(get(this, "firstName")).toLower() + "." + string(get(this, "lastName")).toLower() + "@" + oneOf("googlemail.com", "yahoo.com", "live.com", "outlook.com"))
     }).materialize()
 
     // now define a few courses
@@ -38,8 +41,8 @@ fun main(args: Array<String>) {
 
     // cross join persons and courses and select 40 random elements from this.
     val assignments = choose(cross(persons, courses, {
-        prop("person", firstObject().get("id"))
-        prop("course", secondObject().get("id"))
+        prop("person", get(firstObject(), "id"))
+        prop("course", get(secondObject(), "id"))
     }), 40)
 
 

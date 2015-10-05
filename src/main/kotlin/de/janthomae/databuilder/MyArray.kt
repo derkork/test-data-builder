@@ -31,7 +31,7 @@ public class MyArray<T> : MyExpressionBase<Array<MyExpression<T>>> {
     }
 
 
-    companion  object Index : Stack<Int>() {
+    companion  object Index : Stack<Long>() {
     }
 
 }

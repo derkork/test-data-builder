@@ -39,26 +39,6 @@ public open class MyObject : MyExpression<Any> {
         return prop(name, MyInt(value))
     }
 
-    public fun get(path: String): MyExpression<*> {
-        val index = path.indexOf(".")
-        if (index != -1) {
-            val propertyName = path.substring(0, index)
-            val rest = path.substring(index + 1)
-            val value = properties[propertyName]
-            if ( value is MyObject) {
-                return value.get(rest)
-            }
-            throw IllegalArgumentException("The property at path " + path + " is no object.")
-        }
-        val result = properties[path]
-        if (result != null) {
-            return result;
-        }
-        throw IllegalArgumentException("The property at path " + path + " does not exist.")
-    }
-
-
-
     override fun materialize(): MyExpression<Any> {
         val copy = linkedMapOf<String, MyExpression<*>>()
         for ( i in properties) {

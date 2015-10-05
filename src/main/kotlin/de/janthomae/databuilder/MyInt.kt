@@ -4,10 +4,11 @@ package de.janthomae.databuilder
 import com.google.gson.JsonElement
 import com.google.gson.JsonPrimitive
 
-open class MyInt : MyExpressionBase<Int> {
+open class MyInt : MyExpressionBase<Long> {
 
-    constructor(value: Int) : super(value)
-    constructor(function: () -> Int) : super(function)
+    constructor(value: Long) : super(value)
+    constructor(value: Int) : super(value.toLong())
+    constructor(function: () -> Long) : super(function)
 
     override fun toElement(): JsonElement {
         return JsonPrimitive(computeValue())

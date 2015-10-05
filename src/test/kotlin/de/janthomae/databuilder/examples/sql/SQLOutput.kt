@@ -1,8 +1,10 @@
 package de.janthomae.databuilder.examples.sql
 
+import de.janthomae.databuilder.data.uuid
 import de.janthomae.databuilder.expressions.*
 import de.janthomae.databuilder.obj
-import de.janthomae.databuilder.serialization.toSql
+import de.janthomae.databuilder.serialization.SqlSerializationFormat
+import de.janthomae.databuilder.serialization.toSqlInsert
 
 
 fun main(args: Array<String>) {
@@ -27,7 +29,7 @@ fun main(args: Array<String>) {
     // Now that these records are materialized we can reference properties from them to build derived properties
     // in this case, augment each person with an email address derived from their first & last names
     persons = augment(persons, {
-        prop("email", string(get("firstName")).toLower() + "." + string(get("lastName")).toLower() + "@" + oneOf("googlemail.com", "yahoo.com", "live.com", "outlook.com"))
+        prop("email", string(get(this, "firstName")).toLower() + "." + string(get(this, "lastName")).toLower() + "@" + oneOf("googlemail.com", "yahoo.com", "live.com", "outlook.com"))
     }).materialize()
 
     // now define a few courses
@@ -40,15 +42,15 @@ fun main(args: Array<String>) {
 
     // cross join persons and courses and select 40 random elements from this.
     val assignments = choose(cross(persons, courses, {
-        prop("person", firstObject().get("id"))
-        prop("course", secondObject().get("id"))
+        prop("person", get(firstObject(), "id"))
+        prop("course", get(secondObject(), "id"))
     }), 40)
 
 
 
-    println(persons.toSql("persons"))
-    println(courses.toSql("courses"))
-    println(assignments.toSql("person_course_assignments"))
+    println(persons.toSqlInsert("persons", SqlSerializationFormat.mysql()))
+    println(courses.toSqlInsert("courses", SqlSerializationFormat.mysql()))
+    println(assignments.toSqlInsert("person_course_assignments", SqlSerializationFormat.mysql()))
 
 
 }
