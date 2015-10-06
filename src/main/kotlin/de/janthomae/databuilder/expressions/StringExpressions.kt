@@ -3,8 +3,6 @@ package de.janthomae.databuilder.expressions
 import de.janthomae.databuilder.MyExpression
 import de.janthomae.databuilder.MyInt
 import de.janthomae.databuilder.MyString
-import de.svenjacobs.loremipsum.LoremIpsum
-import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 
 /**
@@ -32,13 +30,6 @@ public fun string(other: MyExpression<*>) : MyString = MyString {other.computeVa
 
 public fun MyString.toLower() : MyString = MyString {computeValue().toLowerCase()}
 
-
-
-/**
- * Produces the first words of "Lorem ipsum".
- */
-public fun lorem(words: MyInt): MyString = MyString { LoremIpsum().getWords(words.computeValue().toInt()) }
-public fun lorem(words: Int): MyString = MyString (LoremIpsum().getWords(words))
 
 
 /**

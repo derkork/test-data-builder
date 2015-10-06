@@ -1,7 +1,9 @@
 package de.janthomae.databuilder.data
 
+import de.janthomae.databuilder.MyInt
 import de.janthomae.databuilder.MyString
 import de.janthomae.databuilder.expressions.oneOf
+import de.svenjacobs.loremipsum.LoremIpsum
 import java.util.*
 
 val maleFirstNames = arrayOf("James", "John", "Robert", "Michael", "William", "David", "Richard", "Joseph", "Charles",
@@ -40,12 +42,26 @@ val lastNames = arrayOf(
         "Hughes", "Flores", "Washington", "Butler", "Simmons", "Foster", "Gonzales", "Bryant", "Alexander", "Russell",
         "Griffin", "Diaz", "Hayes"
 )
-
 val allFirstNames = maleFirstNames + femaleFirstNames
 
+/**
+ * Produces a random male or female first name.
+ */
 public fun firstName(): MyString = oneOf(*allFirstNames)
+
+/**
+ * Produces a random male first name.
+ */
 public fun maleFirstName(): MyString = oneOf(*maleFirstNames)
+
+/**
+ * Produces a random female first name.
+ */
 public fun femaleFirstName(): MyString = oneOf(*femaleFirstNames)
+
+/**
+ * Produces a random last name.
+ */
 public fun lastName(): MyString = oneOf(*lastNames)
 
 /**
@@ -57,3 +73,14 @@ public fun uuid(): MyString = MyString { UUID.randomUUID().toString() }
  * Produces a short random UUID.
  */
 public fun uuidShort() : MyString = MyString { UUID.randomUUID().toString().replace("-", "")}
+
+/**
+ * Produces the first words of "Lorem ipsum".
+ */
+public fun lorem(words: MyInt): MyString = MyString { LoremIpsum().getWords(words.computeValue().toInt()) }
+
+/**
+ * Produces the first words of "Lorem ipsum".
+ */
+public fun lorem(words: Int): MyString = lorem(MyInt(words))
+

@@ -10,8 +10,8 @@ import de.janthomae.databuilder.MyInt
 public fun gtin(value: MyInt): MyInt = MyInt {
     val ean = value.computeValue().toString().padStart(12, '0')
     if (ean.length() > 12) throw IllegalArgumentException("EAN input $ean is too long.")
-    val sum = ean.toCharArray().mapIndexed { i, c -> (if (i % 2 == 0) 1 else 3) * c.toString().toInt()}.sum()
-    (ean + (10 - (sum % 10))).toLong()
+    val sum = ean.toCharArray().mapIndexed { i, c -> (if (i % 2 == 0) 1 else 3) * c.toString().toInt() }.sum()
+    (ean + ((10 - (sum % 10)) % 10)).toLong()
 }
 
 public fun gtin(value: Long): MyInt = gtin(MyInt(value))

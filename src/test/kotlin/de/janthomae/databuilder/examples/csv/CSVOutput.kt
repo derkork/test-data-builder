@@ -1,5 +1,6 @@
 package de.janthomae.databuilder.examples.csv;
 
+import de.janthomae.databuilder.data.lorem
 import de.janthomae.databuilder.data.uuid
 import de.janthomae.databuilder.expressions.*
 import de.janthomae.databuilder.obj
