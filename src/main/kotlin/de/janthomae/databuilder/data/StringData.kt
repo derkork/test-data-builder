@@ -83,4 +83,3 @@ public fun lorem(words: MyInt): MyString = MyString { LoremIpsum().getWords(word
  * Produces the first words of "Lorem ipsum".
  */
 public fun lorem(words: Int): MyString = lorem(MyInt(words))
-

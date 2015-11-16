@@ -28,7 +28,7 @@ public fun MyObject.toJson(pretty: Boolean = true): String {
  */
 public fun MyArray<Any>.toCsv(columnSeparator: Char = ',', rowSeparator: String = "\n", quotationMark: Char = '"', addHeader: Boolean = true): String {
     val materialized = materialize().computeValue();
-    val numberOfLines = materialized.size()
+    val numberOfLines = materialized.size
 
     if (numberOfLines == 0) {
         throw IllegalStateException("Array needs at least one entry to be serialized to CSV.")
@@ -39,14 +39,14 @@ public fun MyArray<Any>.toCsv(columnSeparator: Char = ',', rowSeparator: String 
     val result = StringBuilder()
     var format = CSVFormat.DEFAULT.withDelimiter(columnSeparator).withRecordSeparator(rowSeparator).withQuote(quotationMark).withQuoteMode(QuoteMode.NON_NUMERIC)
     if (addHeader) {
-        val strings = firstElement.properties.keySet().toTypedArray()
+        val strings = firstElement.properties.keys.toTypedArray()
         format = format.withHeader(*strings)
     }
 
     val printer = CSVPrinter(result, format)
 
 
-    val values = arrayOfNulls<Any>(firstElement.properties.size())
+    val values = arrayOfNulls<Any>(firstElement.properties.size)
     for (expression in materialized) {
         var index = 0
         for (prop in (expression as MyObject).properties) {
@@ -64,7 +64,7 @@ public fun MyArray<Any>.toCsv(columnSeparator: Char = ',', rowSeparator: String 
  */
 public fun MyArray<Any>.toSqlInsert(table: String, format: SqlSerializationFormat, columnSelector: ColumnSelector = ColumnSelector.all()): String {
     return generateSql(this, columnSelector) {
-        "INSERT INTO $table(${format.columnQuote + it.keySet().join(format.columnQuote + "," + format.columnQuote) + format.columnQuote}) VALUES (${it.values().joinToString()});\n"
+        "INSERT INTO $table(${format.columnQuote + it.keySet().joinToString(format.columnQuote + "," + format.columnQuote) + format.columnQuote}) VALUES (${it.values.joinToString()});\n"
     }
 }
 
@@ -73,7 +73,7 @@ public fun MyArray<Any>.toSqlInsert(table: String, format: SqlSerializationForma
  */
 public fun MyArray<Any>.toSqlUpdate(table: String, format: SqlSerializationFormat, idColumn: String, columnSelector: ColumnSelector = ColumnSelector.all()): String {
     return generateSql(this, columnSelector.include(idColumn)) {
-        "UPDATE $table SET ${it.entrySet().filter { it.key != idColumn }.
+        "UPDATE $table SET ${it.entries.filter { it.key != idColumn }.
                 joinToString(transform = { format.columnQuote + it.key + format.columnQuote + "=" + it.value }) } where " +
                 "${format.columnQuote+idColumn+format.columnQuote} = ${it.get(idColumn)};\n"
     }
@@ -88,10 +88,10 @@ private fun generateSql(data: MyArray<Any>, columnSelector: ColumnSelector,
         val properties = linkedMapOf<String, Any>()
         val obj = element.asMyObject()
         for (property in obj.properties) {
-            if (columnSelector.accept(property.getKey())) {
-                val value = property.getValue().computeValue()
+            if (columnSelector.accept(property.key)) {
+                val value = property.value.computeValue()
 
-                properties.put(property.getKey(),
+                properties.put(property.key,
                         when (value) {
                             is Number -> value.toString()
                             is Nil -> "NULL"

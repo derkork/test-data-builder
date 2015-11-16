@@ -9,14 +9,14 @@ import java.util.concurrent.ThreadLocalRandom
  * Selects a random element of the given array.
  */
 public fun oneOf(vararg options: String): MyString =
-        MyString { options[ThreadLocalRandom.current().nextInt(0, options.size())] }
+        MyString { options[ThreadLocalRandom.current().nextInt(0, options.size)] }
 
 /**
  * Selects the designated element of the given array. The index will
  * be rolled over if it exceeds the bounds of the array.
  */
 public fun pick(index:MyInt, vararg options:String) : MyString =
-        MyString { options[index.computeValue().toInt() % options.size()] }
+        MyString { options[index.computeValue().toInt() % options.size] }
 
 /**
  * Constructs a MyString from a plain string.

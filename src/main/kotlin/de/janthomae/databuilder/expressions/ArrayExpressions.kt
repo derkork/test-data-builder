@@ -4,14 +4,14 @@ import de.janthomae.databuilder.*
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 
-operator public fun MyInt.times<T>(obj: MyExpression<T>): MyExpression<Array<MyExpression<T>>> =
+operator public fun <T> MyInt.times(obj: MyExpression<T>): MyExpression<Array<MyExpression<T>>> =
         MyComputedExpression {
             this.computeValue() * obj
         }
 
-operator public fun Int.times<T>(obj: MyExpression<T>): MyArray<T> = toLong() * obj
+operator public fun <T> Int.times(obj: MyExpression<T>): MyArray<T> = toLong() * obj
 
-operator public fun Long.times<T>(obj: MyExpression<T>): MyArray<T> =
+operator public fun <T> Long.times(obj: MyExpression<T>): MyArray<T> =
         MyArray<T> {
             val lst = arrayListOf<MyExpression<T>>()
             for (i in 1..this) {
@@ -22,15 +22,15 @@ operator public fun Long.times<T>(obj: MyExpression<T>): MyArray<T> =
 
 public fun currentIndex(): MyInt = MyInt { MyArray.Index.peek() }
 
-public fun oneOf<T>(array: MyExpression<Array<MyExpression<T>>>): MyExpression<T> =
+public fun <T> oneOf(array: MyExpression<Array<MyExpression<T>>>): MyExpression<T> =
         MyComputedExpression {
             val computed = array.computeValue()
-            computed[ThreadLocalRandom.current().nextInt(computed.size())]
+            computed[ThreadLocalRandom.current().nextInt(computed.size)]
         }
 
 public fun oneOf(vararg input: MyExpression<*>) : MyExpression<*> = MyComputedExpression<Any?> {
     @Suppress("UNCHECKED_CAST")
-    (input[ThreadLocalRandom.current().nextInt(0, input.size())] as MyExpression<Any?>)
+    (input[ThreadLocalRandom.current().nextInt(0, input.size)] as MyExpression<Any?>)
 }
 
 
@@ -48,9 +48,9 @@ public fun augment(array: MyExpression<Array<MyExpression<Any>>>, init: MyObject
     result.toTypedArray()
 }
 
-public fun choose<T>(array: MyExpression<Array<MyExpression<T>>>, amount: Int): MyArray<T> = choose(array, MyInt(amount))
+public fun <T> choose(array: MyExpression<Array<MyExpression<T>>>, amount: Int): MyArray<T> = choose(array, MyInt(amount))
 
-public fun choose<T>(array: MyExpression<Array<MyExpression<T>>>, amount: MyInt): MyArray<T> =
+public fun <T> choose(array: MyExpression<Array<MyExpression<T>>>, amount: MyInt): MyArray<T> =
         MyArray<T> {
             val realAmount = amount.computeValue()
             if (realAmount == 0L) {
@@ -63,11 +63,11 @@ public fun choose<T>(array: MyExpression<Array<MyExpression<T>>>, amount: MyInt)
             }
         }
 
-public fun at<R, T : MyExpression<R>>(array: MyExpression<Array<T>>, index: Int): MyExpression<R> = at(array, MyInt(index))
-public fun at<R, T : MyExpression<R>>(array: MyExpression<Array<T>>, index: MyInt): MyExpression<R> =
+public fun <R, T : MyExpression<R>> at(array: MyExpression<Array<T>>, index: Int): MyExpression<R> = at(array, MyInt(index))
+public fun <R, T : MyExpression<R>> at(array: MyExpression<Array<T>>, index: MyInt): MyExpression<R> =
         MyComputedExpression<R> {
             val computedArray = array.computeValue()
-            computedArray[index.computeValue().toInt() % computedArray.size()]
+            computedArray[index.computeValue().toInt() % computedArray.size]
 
         }
 
