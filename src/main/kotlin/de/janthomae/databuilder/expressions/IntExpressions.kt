@@ -24,13 +24,12 @@ public fun counter(start: Long = 1): MyInt = Counter(start)
  * Operators
  */
 operator public fun Long.plus(other: MyInt): MyInt = MyInt { this + other.computeValue() }
-public fun Int.plus(other: MyInt): MyInt = toLong() + other
-public fun MyInt.plus(other: MyInt): MyInt = MyInt { computeValue() + other.computeValue() }
+operator public fun Int.plus(other: MyInt): MyInt = toLong() + other
+operator public fun MyInt.plus(other: MyInt): MyInt = MyInt { computeValue() + other.computeValue() }
 
 operator public fun Long.times(other: MyInt): MyInt = MyInt { this * other.computeValue() }
-public fun Int.times(other: MyInt): MyInt = toLong() * other
-public fun MyInt.time(other: MyInt): MyInt = MyInt { computeValue() * other.computeValue() }
-
+operator public fun Int.times(other: MyInt): MyInt = toLong() * other
+operator public fun MyInt.times(other: MyInt): MyInt = MyInt { computeValue() * other.computeValue() }
 
 private class Counter(start: Long, val counter: AtomicLong = AtomicLong(start)) : MyInt({ counter.andIncrement })
 

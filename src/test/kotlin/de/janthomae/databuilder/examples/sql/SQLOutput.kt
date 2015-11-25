@@ -1,5 +1,7 @@
 package de.janthomae.databuilder.examples.sql
 
+import de.janthomae.databuilder.data.firstName
+import de.janthomae.databuilder.data.lastName
 import de.janthomae.databuilder.data.uuid
 import de.janthomae.databuilder.expressions.*
 import de.janthomae.databuilder.obj
@@ -9,16 +11,16 @@ import de.janthomae.databuilder.serialization.toSqlInsert
 
 fun main(args: Array<String>) {
 
-    // JSON output does allow nesting of structures.
-    // Let's build some test data structure of course records
+    // SQL output cannot be nested, one can have multiple
+    // objects referencing each other.
 
     // first 20 define persons
     var persons = (20 * obj {
         prop("id", uuid())
         // pick a random first name
-        prop("firstName", oneOf("Jack", "Jamie", "John", "Joanne", "Jill", "Jessica"))
+        prop("firstName", firstName())
         // pick a random last name
-        prop("lastName", oneOf("Smith", "Johnson", "Williams", "Jones", "Brown", "Davis", "Miller"))
+        prop("lastName", lastName())
         // a random age
         prop("age", int(20, 55))
         // a random date within the last 5 months
@@ -47,10 +49,16 @@ fun main(args: Array<String>) {
     }), 40)
 
 
-
+    // finally print SQL INSERT statements for MySQL
     println(persons.toSqlInsert("persons", SqlSerializationFormat.mysql()))
     println(courses.toSqlInsert("courses", SqlSerializationFormat.mysql()))
     println(assignments.toSqlInsert("person_course_assignments", SqlSerializationFormat.mysql()))
 
+    // you can also write it to a file
 
+    /*
+    writeToFile(persons.toSqlInsert("persons", SqlSerializationFormat.mysql()), "./output.sql")
+    writeToFile(courses.toSqlInsert("courses", SqlSerializationFormat.mysql()), "./output.sql", true) // append
+    writeToFile(assignments.toSqlInsert("person_course_assignments", SqlSerializationFormat.mysql()), "./output.sql", true)
+    */
 }

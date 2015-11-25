@@ -1,4 +1,3 @@
-
 import de.janthomae.databuilder.data.gtin
 import de.janthomae.databuilder.data.uuidShort
 import de.janthomae.databuilder.expressions.*
@@ -37,14 +36,14 @@ fun main(args: Array<String>) {
         prop("no_ccm_email_notification", 0)
     }).materialize()
 
-    val homebases = customerCount * obj {
+    val homebases = (customerCount * obj {
         prop("id", uuidShort())
         prop("created_at", date)
         prop("last_modified_at", date)
         prop("homebase_serial", uuidShort())
         prop("registered_on", date)
         prop("customer", get(at(customers, counter(0)), "id"))
-    }
+    }).materialize()
 
     val subscriptions = (2 * customerCount * obj {
         prop("id", uuidShort())
